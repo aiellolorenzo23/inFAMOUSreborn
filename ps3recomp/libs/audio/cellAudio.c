@@ -292,10 +292,12 @@ static int audio_backend_init(void)
     s_wasapi_event = CreateEventW(NULL, FALSE, FALSE, NULL);
 
     hr = s_wasapi_client->lpVtbl->Initialize(
-        s_wasapi_client,
-        AUDCLNT_SHAREMODE_SHARED,
-        AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
-        buf_duration, 0, &wfx, NULL);
+      s_wasapi_client,
+      AUDCLNT_SHAREMODE_SHARED,
+      AUDCLNT_STREAMFLAGS_EVENTCALLBACK |
+      AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM |
+      AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY,
+      buf_duration, 0, &wfx, NULL);
 
     if (FAILED(hr)) {
         /* Fallback: try without event callback */
